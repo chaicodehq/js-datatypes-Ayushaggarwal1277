@@ -29,4 +29,20 @@
  */
 export function maskAadhaar(aadhaarNumber) {
   // Your code here
+  if(typeof(aadhaarNumber)!=='string'||aadhaarNumber.length!==12) return "INVALID";
+  for(const char of aadhaarNumber)
+  {
+    if(!/[0-9]/.test(char) || /[-," "]/.test(char)) return "INVALID";
+  }
+  // var s = "";
+  // for(let i=0;i<aadhaarNumber.length;i++)
+  // {
+  //   if(i==4||i==8) s+="-";
+  //   if(i>=8) s+=aadhaarNumber[i];
+  //   else s+="X";
+    
+  // }
+  var res = "";
+  res = `${"X".repeat(4)}-${"X".repeat(4)}-${aadhaarNumber.slice(8,aadhaarNumber.length)}`;
+  return res;
 }

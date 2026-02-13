@@ -48,4 +48,32 @@
  */
 export function analyzeUPITransactions(transactions) {
   // Your code here
+  if(!Array.isArray(transactions) || transactions.length===0) return null;
+  transactions = transactions.filter((e)=>(e.amount>0 && (e.type==="credit" || e.type==="debit")));
+  if(transactions.length===0) return null;
+  var totalCredit = transactions.reduce((total,e)=>e.type==="credit"?total+=e.amount:total = total,0);
+  var totalDebit = transactions.reduce((total,e)=>e.type==="debit"?total+=e.amount:total = total,0);
+  var netBalance = totalCredit - totalDebit;
+  var transactionCount = transactions.length;
+  var avgTransaction = Math.round((totalCredit+totalDebit)/transactionCount);
+  var highestTransaction = transactions.reduce((total,e)=>e.amount>total.amount?total=e:total = total,transactions[0]);
+  var categoryBreakdown = transactions.reduce((obj,e)=>{
+    obj[e.category] = (obj[e.category] || 0) + e.amount; 
+    return obj;
+  }, {});
+  var frequentContact = Object.entries(transactions.map((e)=>e.to).reduce((obj,e)=>(obj[e] = (obj[e] || 0) + 1, obj),{})).sort((a,b)=>b[1]-a[1])[0][0];
+  var allAbove100 = transactions.every((e)=>e.amount>100);
+  var hasLargeTransaction = transactions.some((e)=>e.amount>=5000);
+  return {
+    totalCredit,
+    totalDebit,
+    netBalance,
+    transactionCount,
+    avgTransaction,
+    highestTransaction,
+    categoryBreakdown,
+    frequentContact,
+    allAbove100,
+    hasLargeTransaction
+  }
 }

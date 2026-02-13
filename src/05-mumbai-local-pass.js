@@ -43,4 +43,14 @@
  */
 export function generateLocalPass(passenger) {
   // Your code here
+  if(Array.isArray(passenger)||typeof(passenger)!=="object"||passenger===null) return "INVALID PASS";
+  if(typeof(passenger.name)!=="string" || typeof(passenger.from)!=="string" || typeof(passenger.to)!=="string" || typeof(passenger.classType)!=="string" || passenger.name.length==0 || passenger.from.length==0 || passenger.to.length==0 || passenger.classType.length==0) return "INVALID PASS";
+  if(passenger.classType.toLowerCase()!=="first" && passenger.classType.toLowerCase()!=="second") return "INVALID PASS";
+  var name = passenger.name.toUpperCase();
+  var from = passenger.from.charAt(0).toUpperCase()+passenger.from.toLowerCase().slice(1);
+  var to = passenger.to.charAt(0).toUpperCase()+passenger.to.toLowerCase().slice(1);
+  var classType = passenger.classType.toUpperCase();
+  var passId = passenger.classType.charAt(0).toUpperCase() + passenger.from.charAt(0).toUpperCase()+passenger.from.charAt(1).toUpperCase()+passenger.from.charAt(2).toUpperCase()+passenger.to.charAt(0).toUpperCase()+passenger.to.charAt(1).toUpperCase()+passenger.to.charAt(2).toUpperCase();
+  var res = `MUMBAI LOCAL PASS\n---\nName: ${name}\nFrom: ${from}\nTo: ${to}\nClass: ${classType}\nPass ID: ${passId}`;
+  return res;
 }

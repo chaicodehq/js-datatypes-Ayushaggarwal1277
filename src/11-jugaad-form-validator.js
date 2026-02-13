@@ -63,4 +63,71 @@
  */
 export function validateForm(formData) {
   // Your code here
-}
+  var res = { isValid: false, errors: {} };
+  if(typeof(formData.name)!=="string"||formData.name.trim().length<2 || formData.name.trim().length>50) Object.assign(res.errors,{name: "Name must be 2-50 characters"});
+  if(typeof(formData.email)!=="string") 
+  {
+    Object.assign(res.errors,{email: "Invalid email format"});
+  }
+  else
+  {
+    var index1 = formData.email.indexOf("@");
+    if(index1 === -1) Object.assign(res.errors,{email: "Invalid email format"});
+    else
+    {
+      var index2 = formData.email.indexOf(".",index1);
+      if(index2 === -1) Object.assign(res.errors,{email: "Invalid email format"});
+    }
+    let no = 0;
+    for(let i=0;i<formData.email.length;i++)
+    {
+      if(formData.email[i]==="@") no++;
+    }
+    if(no>1) Object.assign(res.errors,{email: "Invalid email format"});
+  }    
+  var ph = false;
+  if(typeof(formData.phone)!=="string" || formData.phone.length!==10) 
+    {
+      Object.assign(res.errors,{phone: "Invalid Indian phone number"});
+      ph = true;
+    }
+  if(!ph) 
+    {
+      if(!/[6,7,8,9]/.test(formData.phone.charAt(0))) 
+      {
+        Object.assign(res.errors,{phone: "Invalid Indian phone number"});
+        ph = true;
+      }
+    }
+    if(!ph)
+    {
+      for(let i=0;i<10;i++)
+      {
+        if(!/[0-9]/.test(formData.phone[i])) 
+        {
+          Object.assign(res.errors,{phone: "Invalid Indian phone number"});
+          ph = true;
+        }
+      }
+    }
+
+    if(typeof(formData.age)==="string") formData.age = parseInt(formData.age);
+    if(typeof(formData.age)!=="number" || isNaN(formData.age) || !Number.isInteger(formData.age) || formData.age<16 || formData.age>100) Object.assign(res.errors,{age: "Age must be an integer between 16 and 100"});
+    if(typeof(formData.pincode)!=="string" || formData.pincode.length!==6 || formData.pincode.startsWith("0")) Object.assign(res.errors,{pincode: "Invalid Indian pincode"});
+    else
+    {
+      for(let i=0;i<6;i++)
+      {
+        if(!/[0-9]/.test(formData.pincode[i])) 
+        {
+          Object.assign(res.errors,{pincode: "Invalid Indian pincode"});
+          break;
+        }
+      }
+    }
+    if(typeof(formData.state)!=="string" || (formData.state ?? "").trim().length===0) Object.assign(res.errors,{state: "State is required"});
+    if(!Boolean(formData.agreeTerms)) Object.assign(res.errors,{agreeTerms: "Must agree to terms"});
+
+    res.isValid = Object.keys(res.errors).length === 0;
+    return res;
+  }
